@@ -1,0 +1,162 @@
+.home {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+
+    .nav-nb {
+        height: 10%;
+        // width: 100%;
+        // display: flex;
+        // align-items: center;
+        // justify-content: center;
+        // align-self: center;
+        margin-top: 10px;
+        margin-left: 40px;
+        margin-right: 20px;
+        // border-bottom: 1px black solid;
+    }
+
+    .h-body {
+        height: 90%;
+        width: 100%;
+        display: flex;
+
+        .side-nb {
+            width: 17%;
+            height: 100%;
+
+        }
+
+        .home-content {
+            // height: 70vh;
+            // width: 90vw;
+            height: 100%;
+            width: 83%;
+            display: flex;
+            // justify-content: center;
+            // align-items: center;
+            // background-color: black;
+        
+            .left{
+                width:40% ;
+                height: 100%;
+                // background-color: pink;
+                border-top: 1px black solid;
+
+                .dashboard{
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+
+                    .title {
+                        margin-top: 8px;
+                        margin-left: 10px;
+                        font-size: 30px;
+                        height: 6.5%;
+                    }
+                    .above{
+                        display: flex;
+                        padding: 3px;
+                        margin: 2px;
+                        // border: 1px solid #F4511E;
+                        border-radius: 5px;
+                        margin: 10px;
+                        height: 28%;
+
+                        .lef{
+                            width: 40%;
+                            display: flex;
+                            flex-direction: column;
+                            margin-top: 4%;
+                            gap: 5px;
+
+                            .d{
+                                margin: 1px;
+                                padding: 4px;
+                                font-size: 20px;
+                                background-color: #039BE5;
+                                color: white;
+                                border-radius: 10px;
+                                width: max-content;
+                            }
+
+                            .nooftasks{
+
+                            }
+
+                            .prog {
+
+                            }
+                        }
+
+                        .righ{
+                            width: 60%;
+
+                            .team{
+                                padding: 4px;
+                                padding-top: 0;
+                                display: flex;
+                                flex-direction: column;
+                                border: 1px solid black;
+                                border-radius: 5px;
+                                // margin: 5px;
+
+                                .title{
+                                    padding: 2px;
+                                    margin: 4px;
+                                    font-size: 25px;
+                                    margin-bottom: 0px;
+                                }
+                                .members {
+                                    margin-left: 8%;
+                                    display: flex;
+                                    // flex-direction: column;
+                                    flex-wrap: wrap;
+                                    gap: 2%;
+
+                                    .member{
+                                        width: max-content;
+                                        background-color: #33B679;
+                                        color: white;
+                                        border-radius: 10px;
+                                        padding: 2px;
+                                        font-size: 20px;
+                                        margin-top: 8px;
+                                        padding: 2px 12px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .tasks{
+                        height: 56.5%;
+                    }
+                }
+            }
+        
+            .right {
+                height: 100%;
+                width: 60%;
+                // background-color: black;
+                border-top: 1px black solid;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+
+                .btns-right-abv {
+                    display: flex;
+                    justify-content: space-evenly;
+                    gap: 30px;
+                    margin-bottom: -10px;
+                }
+            }
+        }
+        
+    }
+
+}
+
+

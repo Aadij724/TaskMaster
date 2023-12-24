@@ -1,0 +1,45 @@
+.side-nb{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+
+    .li-item{
+        cursor: pointer;        
+
+        &:hover{
+            // background-color: rgba(215, 213, 213, 0.957);
+            background-color: #0d6dfd81;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .active{
+            color: white;
+        }
+    }
+
+
+    #eeee1{
+        height: 100%;
+        // margin-left: -25px;
+        margin: 0;
+        padding: 0;
+        background-color: black;
+        border: 1px black solid;
+        width: 100%;
+    }
+
+    #eeee2{
+        // background-color: black;
+
+    }
+
+    #eeee3{
+
+    }
+
+    #eeee4{
+
+    }
+}

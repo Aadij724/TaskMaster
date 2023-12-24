@@ -1,0 +1,35 @@
+.home {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+
+    .nav-nb {
+        height: 10%;
+        // width: 100%;
+        // display: flex;
+        // align-items: center;
+        // justify-content: center;
+        // align-self: center;
+        margin-top: 10px;
+        margin-left: 40px;
+        margin-right: 20px;
+    }
+
+    .h-body {
+        height: 90%;
+        width: 100%;
+        display: flex;
+
+        .side-nb {
+            width: 17%;
+            height: 100%;
+
+        }
+
+        .home-content {
+            // height: 70vh;
+            // width: 90vw;
+        }
+    }
+}
