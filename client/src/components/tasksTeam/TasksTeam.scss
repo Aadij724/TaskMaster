@@ -8,6 +8,16 @@
     .head {
         font-size: 25px;
         height: 10%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .btn-add-task {
+            margin-top: 6px;
+            margin-right: 20px;
+            // height: 90%;
+            // padding-top: 2px;
+        }
     }
 
     .tasks-list{

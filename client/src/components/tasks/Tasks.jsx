@@ -75,7 +75,7 @@ const Tasks = () => {
             </div>
         </div>
         
-        <TaskModal info={selectedInfo} show={modalShow} onHide={handleCloseModal} />
+        <TaskModal page="personel" info={selectedInfo} show={modalShow} onHide={handleCloseModal} />
     </div>
   )
 }

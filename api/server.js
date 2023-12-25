@@ -8,6 +8,10 @@ const session = require("express-session");
 const passport = require("passport");
 const OAuth2Strategy = require("passport-google-oauth2").Strategy;
 const userdb = require("./models/user.model.js");
+const TeamRoute = require("./routes/team.route.js");
+const UserRoute = require("./routes/user.route.js");
+const TaskRoute = require("./routes/task.route.js");
+
 
 const clientid = "1050381780885-2eo1cjr3uvtmlkggskhcbodqn4c4vlqg.apps.googleusercontent.com"
 const clientsecret = "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"
@@ -47,9 +51,13 @@ passport.use(
             if(!user){
                 user = new userdb({
                     googleId:profile.id,
-                    displayName:profile.displayName,
+                    name:profile.displayName,
                     email:profile.emails[0].value,
-                    image:profile.photos[0].value
+                    image:profile.photos[0].value,
+                    accessToken:accessToken,
+                    refreshToken:refreshToken,
+                    available:true,
+                    teamId: 'none',
                 });
 
                 await user.save();
@@ -71,8 +79,15 @@ passport.deserializeUser((user,done)=>{
     done(null,user);
 });
 
+// Routes
+app.use( "/teams", TeamRoute);
+app.use("/users", UserRoute);
+app.use("/tasks", TaskRoute);
+
 // initial google ouath login
-app.get("/auth/google",passport.authenticate("google",{scope:["profile","email"]}));
+app.get("/auth/google",passport.authenticate("google",{scope:["profile","email",
+'https://www.googleapis.com/auth/calendar',
+'https://www.googleapis.com/auth/calendar.events']}));
 
 app.get("/auth/google/callback",passport.authenticate("google",{
     successRedirect:"http://localhost:5173/",

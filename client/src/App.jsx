@@ -37,16 +37,21 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/">
-            <Route index element={userdata ? <MyDashboard/> : <Login/>} />
+            {
+              userdata ?
+              <Route index element={<MyDashboard/>} /> :
+              <Route index element={<Login/>} />
+            }
+            
             <Route path="signup" element={userdata ? <MyDashboard/>: <SignUp/>} />
             <Route path="login" element={<Login/>} />
             <Route path="profile">
-              <Route index element={userdata ? <Profile/> : <Navigate to={"/login"} /> } />
-              <Route path="edit" element={userdata ? <EditProfile/> : <Navigate to={"/login"}/>} />
+              <Route index element={<Profile/> } />
+              <Route path="edit" element={<EditProfile/> } />
             </Route>
             <Route path="team">
-              <Route index element={userdata ? <Team/> : <Navigate to={"/login"}/>} />
-              <Route path="new" element={userdata ? <CreateTeam/>:<Navigate to={"/login"}/>} />
+              <Route index element={<Team/>} />
+              <Route path="new" element={<CreateTeam/>} />
             </Route>
             <Route path="mystats" element={userdata ? <MyStats/> : <Navigate to={"/login"}/> } />
             <Route path="teamstats" element={userdata ? <TeamStats/> : <Navigate to={"/login"}/> } />

@@ -43,7 +43,7 @@ const Navbar = () => {
                             <div className='userimg_div'>
                                 <img className='img_img' src={userdata.image}/>
                             </div>
-                            <div className='username_div'>{userdata.displayName}</div>
+                            <div className='username_div'>{userdata.name}</div>
                         </div>
                     : <Button variant='success' onClick={getUser}>Sign In</Button>
                 }

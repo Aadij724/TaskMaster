@@ -10,19 +10,19 @@ const taskSchema = new Schema({
     },
     details: {
         type: String,
-        required: false,
+        required: true,
     },
     deadline:{
         type: Date,
         required: false,
     },
     skillsReq: {
-        type: [String],
+        type: String,
         required: false,
     },
-    estimatedTimeReq: {
+    estTimeReq: {
         type: Number,
-        required: false,
+        required: true,
     },
     teamId: {
         type: String,
@@ -36,7 +36,7 @@ const taskSchema = new Schema({
         type: Number,
         required: false,
     },
-    completedBy: {
+    assignedTo: {
         type: String,
         required: false,
     },
@@ -47,7 +47,7 @@ const taskSchema = new Schema({
     status: {
         type: String,
         required: true,
-        eval: ["ongoing", "completed", "toBeDone"],
+        eval: ["completed", "tobedone"],
     },
     
 },{

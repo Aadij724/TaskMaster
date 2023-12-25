@@ -27,11 +27,11 @@ const userSchema = new Schema({
     },
     refreshToken: {
         type: String,
-        default: false,
+        required: false,
     },
     teamId: {
         type: String,
-        required: false,
+        required: true,
     },
     productivity: {
         type: Number,
@@ -40,6 +40,10 @@ const userSchema = new Schema({
     skills:{
         type: [String],
         required: false,
+    },
+    available: {
+        type: Boolean,
+        required: true,
     },
     hobies: {
         type: [

@@ -12,20 +12,16 @@ const teamSchema = new Schema({
         type: [String],
         required: true
     },
-    lead: {
-        type: String,
-        required: true
-    },
     details: {
         type: String,
         required: false,
     },
     skillsReq: {
-        type: [String],
+        type: String,
         required: false,
     },
     estTime:{
-        type: Number,
+        type: String,
         required: false,
     },
     topPerformer: {
@@ -34,7 +30,7 @@ const teamSchema = new Schema({
     },
     tasks: {
         type: [String],
-        required: false
+        required: false,
     },
     progress: {
         type: Number,

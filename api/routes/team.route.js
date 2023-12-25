@@ -2,32 +2,31 @@ const express = require("express");
 const isAuth = require("../middleware/isAuthenticated");
 const Team = require("../models/team.model.js");
 const Task = require("../models/task.model.js");
+const User = require("../models/user.model.js");
+const mongoose = require("mongoose");
 
 const router = express.Router();
 
-router.get("/:teamid", isAuth, async (req,res) => {
-    const teamId = req.user.teamId;
-    
+router.get("/:teamid", async (req,res) => {    
     try {
-        const team = await Team.findById(teamId);
+        const team = await Team.findById(req.params.teamid);
         res.status(200).json(team);
+        console.log("At backend get team: ",team)
     } catch (err) {
-        console.log("Some err at get team");
+        console.log("Some err at get team",err);
     }
 } );
 
 
-router.post("/", isAuth, async(req,res) => {
+router.post("/", async(req,res) => {
 
     const newTeam = new Team({
-        name: req.body.projectName,
-        details: req.body.projectDetails,
+        name: req.body.name,
+        details: req.body.details,
         estTime: req.body.estTime,
         skillsReq: req.body.skillsReq,
-        teamMem: req.body.team,
-        tasks: req.body.tasks,
+        teamMem: req.body.teamMem,
         progress: 0,
-        lead: req.user._id,
     });
 
     try {
@@ -57,20 +56,25 @@ router.put( "/:teamid/task/:taskid/assign", isAuth, async (req,res) => {
         
 })
 
-router.post("/:teamid/task", isAuth, async (req,res) => {
-    try {
-        const newTask = new Task({
-            title: req.body.title,
-            details: req.body.details,
-            status: "tobedone",
-            teamId: req.params.teamid
-        });
 
-        const savedTask = await newTask.save();
-        res.status(200).json(savedTask);
+router.get("/availableEmps", async(req,res) => {
+    try {
+        const availableEmps = await User.find({available:true});
+        res.status(200).json(availableEmps);
     } catch (err) {
         console.log(err);
-        res.status(200).send(err);
+        res.status(500).send(err);
+    }
+})
+
+router.get("/:teamid/tasks", async(req,res) => {
+    try {
+        const tasks = await Task.find({teamId: req.params.teamid});
+        console.log("At backend tasks loaded for team",tasks);
+        res.status(200).json(tasks);
+    } catch (err) {
+        console.log("Error in finding team tasks ",err);
+        res.status(500).send(err);
     }
 })
 
