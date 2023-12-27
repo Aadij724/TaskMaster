@@ -28,9 +28,29 @@ router.post("/", async (req,res) => {
     }
 })
 
+router.put("/:taskid/markCompleted", async (req,res) => {
+    try {
+        const updatedTask = await Task.findOneAndUpdate(
+            { _id: new mongoose.Types.ObjectId(req.params.taskid) },
+            {
+                $set: {
+                    actualTimeTaken: req.body.timeTaken,
+                    status: "completed",
+                }
+            },
+            { new: true }
+        );
+        res.status(200).json(updatedTask);
+        console.log("At  backend task completed",updatedTask);
+    } catch (err) {
+        res.status(500).send(err);
+        console.log("At backend err in completed task",err);
+    }
+})
 
 router.put("/:taskid/setAssign", async (req,res) => {
     try {
+        console.log("At backend assginTo : ",req.body.assignTo)
         const updatedTask = await Task.findOneAndUpdate(
             { _id: new mongoose.Types.ObjectId(req.params.taskid) },
             {
@@ -40,13 +60,14 @@ router.put("/:taskid/setAssign", async (req,res) => {
             },
             { new: true }
         );
-        req.status(200).json(updatedTask);
+        res.status(200).json(updatedTask);
         console.log("At  backend task assign set",updatedTask);
     } catch (err) {
         res.status(500).send(err);
         console.log("At backend err in assign task",err);
     }
 })
+
 
 
 module.exports = router;

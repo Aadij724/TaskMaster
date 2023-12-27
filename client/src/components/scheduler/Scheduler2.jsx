@@ -5,6 +5,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
+
 const Scheduler2 = ({page}) => {
 
 
@@ -292,23 +293,34 @@ const Scheduler2 = ({page}) => {
 
 // ////////////////////////////////////
 
+  const today = 28;
   const daysList = []
   const days = {
-    "Sun": 10,
-    "Mon": 11,
-    "Tue": 12,
-    "Wed": 13,
-    "Thu": 14,
-    "Fri": 15,
-    "Sat": 16
+    "Mon": 25,
+    "Tue": 26,
+    "Wed": 27,
+    "Thu": 28,
+    "Fri": 29,
+    "Sat": 30,
+    "Sun": 31,
   }
   for( var day in days ) {
-    daysList.push(
-      <div className='day' style={{width:"12%"}}>
-        <div className='name'>{day}</div>
-        <div className='number'>{days[day]}</div>
-      </div>
-    )
+    {
+      days[day]==today ?
+      daysList.push(
+        <div className='day' style={{width:"12%"}}>
+          <div className='name'>{day}</div>
+          <div className='number' style={{borderBottom: "6px solid #0d6efd"}}>{days[day]}</div>
+        </div>
+      ) :
+      daysList.push(
+        <div className='day' style={{width:"12%"}}>
+          <div className='name'>{day}</div>
+          <div className='number'>{days[day]}</div>
+        </div>
+      )
+    }
+    
   }
 
   //////////////////////////////////////////////////////
@@ -331,9 +343,9 @@ const Scheduler2 = ({page}) => {
               <div className='today'>
                 {
                   scheduleType=="team" && 
-                  <div className='dayt'>
-                    <div className='name'>Monday</div>
-                    <div className='number'>11</div>
+                  <div className='dayt' style={{borderBottom: "6px solid #0d6efd"}}>
+                    <div className='name'>Thursday</div>
+                    <div className='number'>28</div>
                   </div>
                 }
               </div>

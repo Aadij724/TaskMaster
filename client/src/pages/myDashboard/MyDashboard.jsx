@@ -1,30 +1,100 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import Scheduler from '../../components/scheduler/Scheduler'
 import Scheduler2 from '../../components/scheduler/Scheduler2'
 import "./MyDashboard.scss"
 import Navbar from '../../components/navbar/Navbar'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Tasks from '../../components/tasks/Tasks'
-import Button from 'react-bootstrap/esm/Button'
+import axios from 'axios'
+
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import Scheduler3 from '../../components/scheduler/Scheduler3'
 
 const MyDashboard = () => {
 
+  const [userdata, setUserdata] = useState({});
+  console.log("User data :", userdata);
+  const [teamdata, setTeamdata] = useState({});
+  console.log("Team data :", teamdata);
 
-  const members = [
-    "Rishi Rusia",
-    "Aadi Jain",
-    "Aastha",
-    "Anuj Patwal",
-  ]
-  const tasksAllotted = 5;
-  const progress = 60;
 
-  const members_div = [];
-  var i=0;
-  members.forEach(member => {
-    members_div.push(<div className='member'>{members[i++]}</div>)
-  });
+  const handleGetUser = async () => {
+      try {
+          const response = await axios.get("http://localhost:6005/login/success", { withCredentials: true });
+          console.log("At Frontend user get :",response.data.user);
+          // setUserdata(response.data.user)
+          // console.log("At frintend handleGetUser userdata :",userdata);
+          return response.data.user;
+      } catch (error) {
+          console.log("error", error)
+      }
+  }
 
+  const handleGetTeam = async (teamid) => {
+    try {
+        const teamRes = await axios.get(`http://localhost:6005/teams/${teamid}`, {withCredentials:true});
+        console.log("At Frontend team get :",teamRes.data);
+        // setTeamdata(resp)
+        return teamRes.data;
+    } catch (error) {
+        console.log("error", error)
+    }
+  }
+
+  const getUsernameFromId = async (userid) => {
+    try {
+      const user = await axios.get(`http://localhost:6005/users/${userid}`, {withCredentials:true});
+      console.log("At frontend getUsers: ",user.data.name);
+      return user.data.name;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const [members_div,setMembers_div] = useState([]);
+
+  const getData = async()=>{
+
+    var new_members = [];
+
+    const user = await handleGetUser();
+    setUserdata({...user});
+    console.log("At frintend handleGetUser userdata :",userdata);
+
+    const teamid = user.teamId;
+    console.log("Team Id : ",teamid);
+
+    const team = await handleGetTeam(teamid);
+    setTeamdata({...team});
+    new_members = team.teamMem;
+
+
+    const new_members_div = await Promise.all(
+      new_members.map(async (member) => {
+        const username = await getUsernameFromId(member);
+        return <div className='member'>{username}</div>;
+      })
+    );
+
+    setMembers_div(new_members_div);
+  }
+
+  useEffect(() => {
+
+      getData();
+      console.log("userdata:",userdata);
+      console.log("teamdata:",teamdata);
+      
+  }, [])
+
+
+  const tasksAllotted = 6;
+  const progress =80
+
+  const [scheduleChangeReq,setScheduleChangeReq] = useState('');
 
   return (
     <div className='home'>
@@ -45,7 +115,7 @@ const MyDashboard = () => {
                     Tasks Allotted: {tasksAllotted}
                   </div>
                   <div className='d prog'>
-                    Progress: {progress}
+                    Progress: {progress} %
                   </div>
                 </div>
                 <div className='righ'>
@@ -58,16 +128,26 @@ const MyDashboard = () => {
                 </div>           
               </div>
               <div className='tasks'>
-                <Tasks></Tasks>
+                <Tasks teamid={teamdata._id} userId={userdata._id} username={userdata.name} />
               </div>
             </div>
           </div>
           <div className='right'>
               <div className='btns-right-abv'>
-                <Button variant="primary">Refresh Schedule using AI</Button>
-                <Button variant="success">Integrate on Google Calender</Button>
+                <Form>
+                  <Row>
+                    <Col>
+                      <Form.Control type="text" value={scheduleChangeReq} onChange={(e)=>setScheduleChangeReq(e.target.value)} placeholder="reschedule any task ?" />
+                    </Col>
+                    <Col>
+                      <Button variant="primary">Reschedule tasks using AI</Button>
+                    </Col>
+                  </Row>
+                </Form>
+                    
+                {/* <Button variant="success">Integrate on Google Calender</Button>  */}
               </div>
-              <Scheduler2 page="personel" />
+              <Scheduler3 page="personel" />
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ const userdb = require("./models/user.model.js");
 const TeamRoute = require("./routes/team.route.js");
 const UserRoute = require("./routes/user.route.js");
 const TaskRoute = require("./routes/task.route.js");
+const ScheduleRoute = require("./routes/schedule.route.js");
 
 
 const clientid = "1050381780885-2eo1cjr3uvtmlkggskhcbodqn4c4vlqg.apps.googleusercontent.com"
@@ -83,6 +84,7 @@ passport.deserializeUser((user,done)=>{
 app.use( "/teams", TeamRoute);
 app.use("/users", UserRoute);
 app.use("/tasks", TaskRoute);
+app.use("/schedule", ScheduleRoute);
 
 // initial google ouath login
 app.get("/auth/google",passport.authenticate("google",{scope:["profile","email",

@@ -13,7 +13,6 @@ import Team from './pages/team/Team.jsx'
 import CreateTeam from './pages/createTeam/CreateTeam.jsx'
 
 function App() {
-
   
 
   const [userdata, setUserdata] = useState({});
@@ -22,7 +21,7 @@ function App() {
     const getUser = async () => {
         try {
             const response = await axios.get("http://localhost:6005/login/success", { withCredentials: true });
-            setUserdata(response.data.user)
+            setUserdata({...response.data.user})
         } catch (error) {
             console.log("error", error)
         }
@@ -45,10 +44,7 @@ function App() {
             
             <Route path="signup" element={userdata ? <MyDashboard/>: <SignUp/>} />
             <Route path="login" element={<Login/>} />
-            <Route path="profile">
-              <Route index element={<Profile/> } />
-              <Route path="edit" element={<EditProfile/> } />
-            </Route>
+            <Route path="editprofile" element={userdata ? <EditProfile/> : <Navigate to={"/login"}/> } />
             <Route path="team">
               <Route index element={<Team/>} />
               <Route path="new" element={<CreateTeam/>} />

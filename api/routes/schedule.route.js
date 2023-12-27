@@ -2,9 +2,10 @@ const express = require("express");
 const OpenAI = require("openai");
 const Team = require("../models/team.model.js");
 const Task = require("../models/task.model.js");
+const User = require("../models/user.model.js");
 
 
-const OPENAI_API_KEY=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
+const OPENAI_API_KEY='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'
 
 const openai = new OpenAI({
     apiKey: OPENAI_API_KEY,
@@ -12,7 +13,65 @@ const openai = new OpenAI({
 
 const router = express.Router();
 
-router.get("/team/:teamid", isAuth, async (req, res)=> {
+router.post("/user/:userid", async(req,res) => {
+
+  try {
+    const user = await User.findById(req.params.userid);
+    console.log("User at schedule backend",user);
+    const tasks = await Task.find({assignedTo: user.name});
+    console.log("Tasks at schedule backend",tasks)
+
+    const requestByUser = req.body.requestByUser;
+  
+    const data = await openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are a helpful assistant designed to output JSON.",
+        },
+        {
+          role: "user",
+          content:
+            `Design a timetable for whole week in 24hr format Eg( "Monday": {"9:00 - 10:00": "task 1", ...so on}, "Tuesday":{...}, ..).
+              For Complete Week Sunday to Saturday
+              Important : Mention every time interval only from 9am to 6pm
+              Minimum time spend on any activity is 30 mins
+              timtable should only contain tasks that a Employee has in his office ${tasks}
+              Use task name only -> free,meeting,break,lunch,learn,for any task use exact task.title.
+              you need to use task title from ${tasks} and write same title in schedule Eg Task 1, Task 2
+              prepare timetable only for office time that is 9am to 6pm and include only the above activities in it.
+              you can do a task on many days also. For eg task 1 can be done on monday and tuesday etc
+              breaks are needed while working continuously
+              office Hours->9am to 6pm
+              this is the userdata: ${user}.
+              This request raised by user sometimes consider this while making timetable if present, request: ${requestByUser}
+              `,
+        },
+      ],
+      model: "gpt-3.5-turbo-1106",
+      response_format: { type: "json_object" },
+      temperature: 0.8
+    });
+
+    if (data) {
+      //   if (data.choices[0].text) {
+      //     res.status(200).json(data.choices[0].text);
+      //   }
+      const timeTableText = data.choices[0].message.content;
+      const timeTableJson = JSON.parse(timeTableText);
+      res.status(200).send(timeTableJson);
+      console.log("Timetable at backend:",timeTableJson);
+    }
+  } catch (err) {
+      console.log(err);
+      res.status(404).json({
+        message: err.message,
+      });
+    }
+  }
+)
+
+router.get("/team/:teamid", async (req, res)=> {
 
     try {    
 
@@ -39,8 +98,8 @@ router.get("/team/:teamid", isAuth, async (req, res)=> {
                     Design a timetable for whole week in 24hr format Eg( {"09:00 - 10:00": "meeting", "10:00 - 11:00": "task 1", ... , "17:00 - 18:00": "task 10"} ).
                       only for today
                       Mention every time interval from 9am to next 6pm not any other
-                      Minimum time spend on any activity is 30 mins
-                      Use task name only -> free,meeting,break,lunch,project( for any task like task1, task 2, ..).
+                      Minimum time spend on any activity is 30 mins. You can make longer activities from that
+                      Use task name only -> free,meeting,break,lunch,tak( for any task like task1, task 2, ..).
                       preffered work in office hours-> meeting,break,project,lunch,free
                       breaks are needed while working continuously
                       lunch time:1pm
@@ -71,9 +130,7 @@ router.get("/team/:teamid", isAuth, async (req, res)=> {
 
 })
 
-router.get("/user/:userid", isAuth, async (req, res)=> {
 
-})
 
 module.exports = router;
 

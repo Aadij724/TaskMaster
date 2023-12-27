@@ -37,25 +37,6 @@ router.post("/", async(req,res) => {
     }
 });
 
-router.put( "/:teamid/task/:taskid/assign", isAuth, async (req,res) => {
-    const assignTo = req.body.assignTo;
-
-    try {
-        const updatedTask = await Task.findOneAndUpdate(
-            {id: req.params.taskid},
-            {
-                $set: { userId: assignTo }
-            },
-            { new: true }
-        );
-
-        res.status(200).json(updatedTask);
-    } catch (err) {
-        res.send(err);
-    }
-        
-})
-
 
 router.get("/availableEmps", async(req,res) => {
     try {

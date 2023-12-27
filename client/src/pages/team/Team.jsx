@@ -8,8 +8,10 @@ import { teams } from '../../data.js';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 const Team = () => {
+
 
   const variant1 = 'Dark';
   const variant2 = 'Secondary';
@@ -92,6 +94,7 @@ const Team = () => {
       getData();
       console.log("userdata:",userdata);
       console.log("teamdata:",teamdata);
+
       
   }, [])
 
@@ -154,7 +157,7 @@ const Team = () => {
                       </div>
                     </div>
                   </div>
-                  
+                
                 </div>
                 <div className='down-left-project-div'>
                   <div className='tasks'>

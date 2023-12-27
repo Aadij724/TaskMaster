@@ -29,6 +29,10 @@ const userSchema = new Schema({
         type: String,
         required: false,
     },
+    designation: {
+        type: String,
+        required: false,
+    },
     teamId: {
         type: String,
         required: true,
@@ -46,12 +50,7 @@ const userSchema = new Schema({
         required: true,
     },
     hobies: {
-        type: [
-            {
-                hobieName: String,
-                preferredTimeSpend: Number,
-            }
-        ],
+        type: [String],
         required: false
     },
     tasks: {
@@ -79,17 +78,57 @@ const userSchema = new Schema({
     },
     tasksCompleted: {
         type: Number,
+        default: 0,
+    },
+    totalTasks: {
+        type: Number,
+        default: 0
     },
     goals: {
-        type: [
-            {
-                goalName: String,
-                timeReqHours: Number,
-                goalProgress: Number
-            }
-        ],
+        type: [String],
         required: false
-    }
+    },
+    screenTime: {
+        type: Number,
+        required: false,
+    },
+    exerciseHours: {
+        type: Number,
+        required: false,
+    },
+    schedule: {
+        type: {
+            "Sunday": {
+                type: String,
+                default: "Not Set",
+            },
+            "Monday": {
+                type: String,
+                default: "Not Set",
+            },
+            "Tuesday": {
+                type: String,
+                default: "Not Set",
+            },
+            "Wednesday": {
+                type: String,
+                default: "Not Set",
+            },
+            "Thursday": {
+                type: String,
+                default: "Not Set",
+            },
+            "Friday": {
+                type: String,
+                default: "Not Set",
+            },
+            "Saturday": {
+                type: String,
+                default: "Not Set"
+            }
+        },
+        required: false,
+    },
     
 },{
     timestamps:true

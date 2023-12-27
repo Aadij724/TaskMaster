@@ -6,6 +6,7 @@ import Groups3Icon from '@mui/icons-material/Groups3';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import "./Sidebar.scss"
 import { Link } from 'react-router-dom';
@@ -24,24 +25,25 @@ const Sidebar = () => {
     <div className='side-nb'>
         <div className="d-flex flex-column flex-shrink-0 p-3 bg-light" id='eeee1'>
             <div className="nav nav-pills flex-column mb-auto" id='eeee3'>
+            <Link to={"/editprofile"} style={{textDecoration: "none"}}>
+                <li className='li-item' onClick={()=>{setTab('editprofile')}}>
+                    <a className={ tab=="editprofile" ? "nav-link active" : "nav-link link-dark"}>
+                    {/* <svg className="bi me-2" width="16" height="16"><use xlinkHref="#grid"></use></svg> */}
+                    <EditIcon className="bi me-2" height="15px" width="16px"/>
+                    Edit Profile
+                    </a>
+                </li>
+            </Link>
             <Link to={"/"} style={{textDecoration: "none"}}>
                 <li className='li-item' onClick={()=>{setTab('')}}>
                     <a className={ tab=="" ? "nav-link active" : "nav-link link-dark"}>
                     {/* <svg className="bi me-2" width="16" height="16"><use xlinkHref="#grid"></use></svg> */}
-                    <DashboardIcon className="bi me-2" height="15px" width="16px"/>
+                    <AccountBoxIcon className="bi me-2" height="15px" width="16px"/>
                     My Dashboard
                     </a>
                 </li>
             </Link>
-            <Link to={"/profile"} style={{textDecoration: "none"}}>
-                <li className='li-item' onClick={()=>{setTab('profile')}}>
-                    <a className={ tab=="profile" ? "nav-link active" : "nav-link link-dark"}>
-                    {/* <svg className="bi me-2" width="16" height="16"><use xlinkHref="#grid"></use></svg> */}
-                    <AccountBoxIcon className="bi me-2" height="15px" width="16px"/>
-                    Profile
-                    </a>
-                </li>
-            </Link>
+            
             <Link to={"/mystats"} style={{textDecoration: "none"}}>
                 <li className='li-item' onClick={()=>{setTab('mystats')}}>
                     <a className={ tab=="mystats" ? "nav-link active" : "nav-link link-dark"}>

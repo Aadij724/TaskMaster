@@ -14,17 +14,37 @@ const TaskModal = ({page,show,onHide,info}) => {
 
   const handleAssignTo = async()=> {
     try {
-      const updatedTask = await axios.put(`http://localhost:6005/tasks/${info._id}/setAssign`, assignTo, {withCredentials:true});
+      const updatedTask = await axios.put(`http://localhost:6005/tasks/${info._id}/setAssign`, {assignTo:assignTo}, {withCredentials:true});
       console.log("At Frontend assignedTo done",updatedTask);
     } catch (err) {
       console.log("Some error at task assign",err);
     }
 
     // ()=>onHide();
-    // setAssignTo();
-    setTimeout(()=>onHide(), 1000);
+    
+    setTimeout( ()=> {
+      setAssignTo('');
+      onHide();
+    },1000);
   }
 
+  const [timeTaken, setTimeTaken] = useState('');
+
+  const handleTaskCompleted = async()=> {
+    try {
+      const updatedTask = await axios.put(`http://localhost:6005/tasks/${info._id}/markCompleted`, {timeTaken:timeTaken}, {withCredentials:true});
+      console.log("At Frontend assignedTo done",updatedTask);
+    } catch (err) {
+      console.log("Some error at task assign",err);
+    }
+
+    // ()=>onHide();
+    
+    setTimeout( ()=> {
+      setTimeTaken('');
+      onHide();
+    },1000);
+  }
   return (
     <Modal 
         show={show}
@@ -43,7 +63,8 @@ const TaskModal = ({page,show,onHide,info}) => {
         <p>
           {info && info.details}
         </p>
-        <h5>Status - {info && info.status}</h5>
+        <h5>Status - {info?.status}</h5>
+        <h5>Estimated Time Required - {info?.estTimeReq} hrs</h5>
         <h5>Assigned to - {info?.assignedTo}</h5>
         { page=="team" &&
           info?.assignedTo=="none" ?
@@ -58,6 +79,26 @@ const TaskModal = ({page,show,onHide,info}) => {
               <Col>
                 <Button variant="success" onClick={handleAssignTo} size="sm">
                   Submit
+                </Button>
+              </Col>
+            </Row>
+          </Form>:
+          <></>
+        }
+        {
+          page=="personel" && 
+          info?.status=="tobedone" ?
+          <Form>
+            <Row>
+              <Form.Label column="sm" lg={3}>
+                <h5>Time Taken : </h5>
+              </Form.Label>
+              <Col>
+                <Form.Control size="sm" value={timeTaken || ''} onChange={(e)=>setTimeTaken(e.target.value)} type="text" placeholder="Time Taken" />
+              </Col>
+              <Col>
+                <Button variant="success" onClick={handleTaskCompleted} size="sm">
+                  Mark as Completed
                 </Button>
               </Col>
             </Row>
