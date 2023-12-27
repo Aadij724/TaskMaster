@@ -7,7 +7,9 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import axios from 'axios';
 
 
-const Scheduler3 = ({page}) => {
+const Scheduler3 = ({page,scheduleChangeReq,load}) => {
+
+    const [scheduleType, setScheduleType ] = useState(page)
 
     //////////////////////////
 
@@ -24,7 +26,7 @@ const Scheduler3 = ({page}) => {
 
   const handleGetSchedule = async (userdata) => {
         try {
-            const schedule1 = await axios.post(`http://localhost:6005/schedule/user/${userdata._id}`, {requestByUser: ''}, {withCredentials: true});
+            const schedule1 = await axios.post(`http://localhost:6005/schedule/user/${userdata._id}`, {requestByUser: scheduleChangeReq}, {withCredentials: true});
             console.log("AT Frontend Schedule:",schedule1);
             return schedule1;
         } catch (err) {
@@ -57,21 +59,26 @@ const Scheduler3 = ({page}) => {
   //////////////////////////////
 
   const setLists = async() => {
-    setTaskOrder1(schedule["Sunday"]);
-    setTaskOrder2(schedule["Monday"]);
-    setTaskOrder3(schedule["Tuesday"]);
-    setTaskOrder4(schedule["Wednesday"]);
-    setTaskOrder5(schedule["Thursday"]);
-    setTaskOrder6(schedule["Friday"]);
-    setTaskOrder7(schedule["Saturday"]);
+    await Promise.all([
+        setTaskOrder1(schedule["Sunday"]),
+        setTaskOrder2(schedule["Monday"]),
+        setTaskOrder3(schedule["Tuesday"]),
+        setTaskOrder4(schedule["Wednesday"]),
+        setTaskOrder5(schedule["Thursday"]),
+        setTaskOrder6(schedule["Friday"]),
+        setTaskOrder7(schedule["Saturday"]),
+    ])
     
-    taskListGen(setTaskList1, taskOrder1);
-    taskListGen(setTaskList2, taskOrder2);
-    taskListGen(setTaskList3, taskOrder3);
-    taskListGen(setTaskList4, taskOrder4);
-    taskListGen(setTaskList5, taskOrder5);
-    taskListGen(setTaskList6, taskOrder6);
-    taskListGen(setTaskList7, taskOrder7);
+    
+    await Promise.all([
+        taskListGen(setTaskList1, taskOrder1),
+        taskListGen(setTaskList2, taskOrder2),
+        taskListGen(setTaskList3, taskOrder3),
+        taskListGen(setTaskList4, taskOrder4),
+        taskListGen(setTaskList5, taskOrder5),
+        taskListGen(setTaskList6, taskOrder6),
+        taskListGen(setTaskList7, taskOrder7),
+    ]);
   }
 
   /////////////////////////////
@@ -99,15 +106,33 @@ const Scheduler3 = ({page}) => {
     console.log("At frontend Scheduler 3 useEffect")
     console.log("userdata: ",userdata);
 
-    getSchedule(userdata)
-    console.log("At frontend useEffect Schedule 3 :",schedule);
+    getSchedule(userdata).then(()=>{
+        console.log("At frontend useEffect Schedule 3 :",schedule);
+        setLists().then(()=>{
+            console.log("TaskOrder1 :",taskOrder1)
+            console.log("TaskList1 :",taskList1);
+        })
+    })
     
-    setLists();
+    
+  }, [page,load])
 
-    console.log("TaskOrder1 :",taskOrder1)
-    console.log("TaskList1 :",taskList1);
+//   useEffect(() => {
+      
+//     getData();
+//     console.log("At frontend Scheduler 3 useEffect")
+//     console.log("userdata: ",userdata);
+
+//     getSchedule(userdata).then(()=>{
+//         console.log("At frontend useEffect Schedule 3 :",schedule);
+//         setLists().then(()=>{
+//             console.log("TaskOrder1 :",taskOrder1)
+//             console.log("TaskList1 :",taskList1);
+//         })
+//     })
     
-  }, [])
+    
+//   }, [])
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,15 +186,15 @@ const Scheduler3 = ({page}) => {
 
       function convertTo12HourFormat(timeString) {
         const [hours, minutes] = timeString.split(':').map(Number);
-    
+      
         const period = hours >= 12 ? 'PM' : 'AM';
-    
+      
         const hours12 = hours % 12 || 12;
-    
+      
         const timeWithoutMinutes = minutes === 0 ? `${hours12}` : `${hours12}:${minutes}`;
-    
+      
         const result = `${timeWithoutMinutes} ${period}`;
-    
+      
         return result;
       }
     
@@ -213,32 +238,30 @@ const Scheduler3 = ({page}) => {
 
     ///////////////////////////////////////////////////////////////
 
-    function taskListGen (  setTaskList, taskOrder) {
-      var i=0;
-      for (const timeInterval in taskOrder) {
-        i++;
-        const durationInMinutes = calculateDurationInMinutes(timeInterval);
-        console.log(durationInMinutes);
-        const details = taskOrder[timeInterval];
-    
-        const hrs = durationInMinutes/60;
-        var h = (durationInMinutes * 1.33) + ((hrs-1)*8)  ;
-        i++;
-    
-        const [startTime, endTime] = timeInterval.split(' - ');
-        const convertedStartTime = convertTo12HourFormat(startTime);
-        const convertedEndTime = convertTo12HourFormat(endTime);
-
-        var new_taskList = []
-        new_taskList.push(
-          <div key={durationInMinutes + i} className={'task '+ taskOrder[timeInterval]} style={{height: h +'px'}}>
-            <div className='det'>{details}</div>
-            <div className='tt'>{`${convertedStartTime} - ${convertedEndTime}`}</div>
-          </div> 
-        )
-        setTaskList(new_taskList);
+    function taskListGen(setTaskList, taskOrder) {
+        var taskElements = []; // Create an array to accumulate task elements
+      
+        for (const timeInterval in taskOrder) {
+          const durationInMinutes = calculateDurationInMinutes(timeInterval);
+          const details = taskOrder[timeInterval];
+      
+          const hrs = durationInMinutes / 60;
+          const h = durationInMinutes * 1.33 + (hrs - 1) * 8;
+      
+          const [startTime, endTime] = timeInterval.split(' - ');
+          const convertedStartTime = convertTo12HourFormat(startTime);
+          const convertedEndTime = convertTo12HourFormat(endTime);
+      
+          taskElements.push(
+            <div key={timeInterval} className={'taski ' + taskOrder[timeInterval]} style={{ height: h + 'px' }}>
+              <div className='det'>{details}</div>
+              <div className='tt'>{`${convertedStartTime} - ${convertedEndTime}`}</div>
+            </div>
+          );
+        }
+      
+        setTaskList(taskElements); // Set the state after the loop is completed
       }
-    }
 
     // taskListGen(taskList1, taskOrder1);
     // taskListGen(taskList2, taskOrder2);
@@ -299,7 +322,7 @@ const Scheduler3 = ({page}) => {
 
   ////////////////////////////////////////////////////////
 
-  const [scheduleType, setScheduleType ] = useState(page)
+  
 
   return (
     <div className='scheduler'>
@@ -327,28 +350,24 @@ const Scheduler3 = ({page}) => {
             </div>
             <div className='main'>
                 <div className='timeline'>{hourList}</div>
-                <div className='lists'>
-                    {
-                        schedule ? 
-                        <div>
-                            <div key={1} className='list' style={{width:"12%"}}>{taskList1}</div>
-                            <div key={2} className='list' style={{width:"12%"}}>{taskList2}</div>
-                            <div key={3} className='list' style={{width:"12%"}}>{taskList3}</div>
-                            <div key={4} className='list' style={{width:"12%"}}>{taskList4}</div>
-                            <div key={5} className='list' style={{width:"12%"}}>{taskList5}</div>
-                            <div key={6} className='list' style={{width:"12%"}}>{taskList6}</div>
-                            <div key={7} className='list' style={{width:"12%"}}>{taskList7}</div>
-                            
-
-                            { scheduleType=='team' && <div key={1} className='list' style={{width:"22%"}}>{taskList1}</div> }
-                            { scheduleType=='team' && <div key={2} className='list' style={{width:"22%"}}>{taskList2}</div> }
-                            { scheduleType=='team' && <div key={3} className='list' style={{width:"22%"}}>{taskList3}</div> }
-                            { scheduleType=='team' && <div key={4} className='list' style={{width:"22%"}}>{taskList4}</div> } 
-                        </div> :
-                        <div></div>
-                    }
-                  
-                </div>
+                {
+                    (schedule) ?
+                    <div className='lists'>
+                        { scheduleType=='personel' && taskOrder1 && <div key={1} className='list' style={{width:"12%"}}>{taskList1}</div>}
+                        { scheduleType=='personel' && taskOrder2 && <div key={2} className='list' style={{width:"12%"}}>{taskList2}</div>}
+                        { scheduleType=='personel' && taskOrder3 && <div key={3} className='list' style={{width:"12%"}}>{taskList3}</div>}
+                        { scheduleType=='personel' && taskOrder4 && <div key={4} className='list' style={{width:"12%"}}>{taskList4}</div>}
+                        { scheduleType=='personel' && taskOrder5 && <div key={5} className='list' style={{width:"12%"}}>{taskList5}</div>}
+                        { scheduleType=='personel' && taskOrder6 && <div key={6} className='list' style={{width:"12%"}}>{taskList6}</div>}
+                        { scheduleType=='personel' && taskOrder7 && <div key={7} className='list' style={{width:"12%"}}>{taskList7}</div>}
+                        
+                        { scheduleType=='team' && <div key={1} className='list' style={{width:"22%"}}>{taskList1}</div> }
+                        { scheduleType=='team' && <div key={2} className='list' style={{width:"22%"}}>{taskList2}</div> }
+                        { scheduleType=='team' && <div key={3} className='list' style={{width:"22%"}}>{taskList3}</div> }
+                        { scheduleType=='team' && <div key={4} className='list' style={{width:"22%"}}>{taskList4}</div> } 
+                    </div> :
+                    <div className='lists' style={{color:"black"}}>Loading Lists</div>
+                }
             </div>
         </div>
     </div>

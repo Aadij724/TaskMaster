@@ -203,11 +203,12 @@
 
                     // height: 2200px; ////////// for whole 24hrs final
                     height: 825px;
-                    
+                    // width: 100px; 
 
-                    .task{
+                    .taski{
                       // height: 80px;
                         width: 100%;
+                        // width: 94px;//////////////////////////////////////////
                         // color: black;
                         // min-height: 80px;
                         
@@ -221,6 +222,35 @@
                         display: flex;
                         flex-direction: column;
 
+                        &.Meeting, &.meeting {
+                            background-color: #D50000;
+                          }
+                          &.Habit, &.habit{
+                            background-color: #E67C73;
+                          }
+                          &.Gym, &.gym{
+                            background-color: #8E24AA;
+                          }
+                          &.Learn, &.learn, &.bath{
+                            background-color: #0B8043;
+                          }
+                          &.Breakfast, &.Lunch, &.Dinner, &.breakfast, &.lunch, &.dinner {
+                            background-color: #F4511E;
+                          }
+                          &.Break, &.break{
+                            background-color: #7986CB;
+                          }
+                          &.Free, &.free{
+                            background-color: #33B679;
+                            // opacity: 0;
+                          }
+                          .Task, .task{
+                            background-color: #E67C73;
+                          }
+                          &.Sleep, &.sleep{
+                            background-color: #616161;
+                          }
+
                         .det{
 
                         }
@@ -231,34 +261,7 @@
                         }
                     }
 
-                    .meeting {
-                      background-color: #D50000;
-                    }
-                    .habit{
-                      background-color: #039BE5;
-                    }
-                    .gym{
-                      background-color: #8E24AA;
-                    }
-                    .bath{
-                      background-color: #0B8043;
-                    }
-                    .breakfast, .lunch, .dinner {
-                      background-color: #F4511E;
-                    }
-                    .break{
-                      background-color: #7986CB;
-                    }
-                    .free{
-                      background-color: #33B679;
-                      // opacity: 0;
-                    }
-                    .project{
-                      background-color: #E67C73;
-                    }
-                    .sleep{
-                      background-color: #616161;
-                    }
+                    
                 }
 
             }

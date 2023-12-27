@@ -5,7 +5,7 @@ const Task = require("../models/task.model.js");
 const User = require("../models/user.model.js");
 
 
-const OPENAI_API_KEY='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'
+const OPENAI_API_KEY='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'
 
 const openai = new OpenAI({
     apiKey: OPENAI_API_KEY,

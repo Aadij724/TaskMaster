@@ -95,6 +95,11 @@ const MyDashboard = () => {
   const progress =80
 
   const [scheduleChangeReq,setScheduleChangeReq] = useState('');
+  const [disableControl,setDisableControl] = useState(false);
+
+  const handleRefresh = ()=> {
+    setDisableControl(true);
+  }
 
   return (
     <div className='home'>
@@ -137,17 +142,17 @@ const MyDashboard = () => {
                 <Form>
                   <Row>
                     <Col>
-                      <Form.Control type="text" value={scheduleChangeReq} onChange={(e)=>setScheduleChangeReq(e.target.value)} placeholder="reschedule any task ?" />
+                      <Form.Control type="text" disabled={disableControl} value={scheduleChangeReq} onChange={(e)=>setScheduleChangeReq(e.target.value)} placeholder="reschedule any task ?" />
                     </Col>
                     <Col>
-                      <Button variant="primary">Reschedule tasks using AI</Button>
+                      <Button variant="primary" disabled={disableControl} onClick={handleRefresh}>Reschedule tasks using AI</Button>
                     </Col>
                   </Row>
                 </Form>
                     
                 {/* <Button variant="success">Integrate on Google Calender</Button>  */}
               </div>
-              <Scheduler3 page="personel" />
+              <Scheduler3 page="personel" load={disableControl} scheduleChangeReq={scheduleChangeReq} />
           </div>
         </div>
       </div>
